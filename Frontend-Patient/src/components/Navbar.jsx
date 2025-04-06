@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { AiOutlineClose } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const Navbar = () => {
   const [show, setShow] = useState(true);
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
@@ -13,7 +15,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await axios
-      .get("http://localhost:4000/api/v1/user/patient/logout", {
+      .get(`${BACKEND_URL}/api/v1/user/patient/logout`, {
         withCredentials: true,
       })
       .then((res) => {

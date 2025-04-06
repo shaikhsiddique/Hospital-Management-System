@@ -5,6 +5,8 @@ import Loading from "./loading";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const Login = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
   const [email, setEmail] = useState("");
@@ -18,7 +20,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/user/login",
+        `${BACKEND_URL}/api/v1/user/login`,
         { email, password, confirmPassword, role: "Admin" },
         {
           withCredentials: true,

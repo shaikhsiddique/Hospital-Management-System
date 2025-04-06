@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const AppointmentForm = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -34,7 +36,7 @@ const AppointmentForm = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       const { data } = await axios.get(
-        "http://localhost:4000/api/v1/user/doctors",
+        `${BACKEND_URL}/api/v1/user/doctors`,
         { withCredentials: true }
       );
       setDoctors(data.doctors);
@@ -47,7 +49,7 @@ const AppointmentForm = () => {
     try {
       const hasVisitedBool = Boolean(hasVisited);
       const { data } = await axios.post(
-        "http://localhost:4000/api/v1/appointment/post",
+        `${BACKEND_URL}/api/v1/appointment/post`,
         {
           firstName,
           lastName,
@@ -108,14 +110,14 @@ const AppointmentForm = () => {
           </div>
           <div>
             <input
-              type="text"
+              type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="number"
-              placeholder="Mobile"
+              placeholder="Phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
@@ -135,11 +137,14 @@ const AppointmentForm = () => {
             />
           </div>
           <div>
-            <select value={gender} onChange={(e) => setGender(e.target.value)}>
+            <select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+            >
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
-              <option value="Female">Others</option>
+              <option value="Others">Others</option>
             </select>
             <input
               type="date"
@@ -151,16 +156,12 @@ const AppointmentForm = () => {
           <div>
             <select
               value={department}
-              onChange={(e) => {
-                setDepartment(e.target.value);
-                setDoctorFirstName("");
-                setDoctorLastName("");
-              }}
+              onChange={(e) => setDepartment(e.target.value)}
             >
-              {departmentsArray.map((depart, index) => {
+              {departmentsArray.map((element, index) => {
                 return (
-                  <option value={depart} key={index}>
-                    {depart}
+                  <option value={element} key={index}>
+                    {element}
                   </option>
                 );
               })}
@@ -172,43 +173,42 @@ const AppointmentForm = () => {
                 setDoctorFirstName(firstName);
                 setDoctorLastName(lastName);
               }}
-              disabled={!department}
             >
               <option value="">Select Doctor</option>
               {doctors
                 .filter((doctor) => doctor.doctrDptmnt === department)
-                .map((doctor, index) => (
-                  <option
-                    value={`${doctor.firstName} ${doctor.lastName}`}
-                    key={index}
-                  >
-                    {doctor.firstName} {doctor.lastName}
-                  </option>
-                ))}
+                .map((doctor, index) => {
+                  return (
+                    <option
+                      value={`${doctor.firstName} ${doctor.lastName}`}
+                      key={index}
+                    >
+                      {`${doctor.firstName} ${doctor.lastName}`}
+                    </option>
+                  );
+                })}
             </select>
           </div>
-          <textarea
-            rows="10"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            placeholder="Address"
-          />
-          <div
-            style={{
-              gap: "10px",
-              justifyContent: "flex-end",
-              flexDirection: "row",
-            }}
-          >
-            <p>Have you visited before?</p>
-            <input
-              type="checkbox"
-              checked={hasVisited}
-              onChange={(e) => setHasVisited(e.target.checked)}
-              style={{ flex: "none", width: "25px"}}
-            />
+          <div>
+            <textarea
+              rows={3}
+              placeholder="Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            ></textarea>
+            <div className="checkbox">
+              <input
+                type="checkbox"
+                id="hasVisited"
+                checked={hasVisited}
+                onChange={(e) => setHasVisited(e.target.checked)}
+              />
+              <label htmlFor="hasVisited">Have you visited before?</label>
+            </div>
           </div>
-          <button >Get Appointment</button>
+          <div style={{ justifyContent: "center", alignItems: "center" }}>
+            <button type="submit">Book Appointment</button>
+          </div>
         </form>
       </div>
     </>

@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const MessageForm = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -14,7 +16,7 @@ const MessageForm = () => {
     try {
       await axios
         .post(
-          "http://localhost:4000/api/v1/message/send",
+          `${BACKEND_URL}/api/v1/message/send`,
           { firstName, lastName, phone, email, message },
           {
             withCredentials: true,

@@ -11,11 +11,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Sidebar = () => {
   const [show, setShow] = useState(false);
 
-  const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
 
   const navigateTo = useNavigate();
 
@@ -45,17 +46,20 @@ const Sidebar = () => {
   };
 
   const handleLogout = async () => {
-    await axios
-      .get("http://localhost:4000/api/v1/user/admin/logout", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        toast.success(res.data.message);
-        setIsAuthenticated(false);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+    try {
+      await axios
+        .get(`${BACKEND_URL}/api/v1/user/admin/logout`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          toast.success(response.data.message);
+          setIsAuthenticated(false);
+          setUser({});
+          navigateTo("/login");
+        });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   return (

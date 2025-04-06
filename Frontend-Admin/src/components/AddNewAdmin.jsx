@@ -5,6 +5,8 @@ import axios from "axios";
 import Loading from "./loading";
 import { toast } from "react-toastify";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const AddNewAdmin = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
   const [firstName, setFirstName] = useState("");
@@ -25,7 +27,7 @@ const AddNewAdmin = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/user/admin/addnew",
+        `${BACKEND_URL}/api/v1/user/admin/addnew`,
         {
           firstName,
           lastName,

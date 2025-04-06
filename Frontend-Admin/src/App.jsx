@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import Messages from "./components/Messages";
@@ -14,22 +14,24 @@ import axios from "axios";
 import Loading from "./components/loading";
 import "./App.css";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const App = () => {
-  const { isAuthenticated, setIsAuthenticated, setUser } = useContext(Context);
+  const { setIsAuthenticated, setUser } = useContext(Context);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/api/v1/user/admin/me",
+          `${BACKEND_URL}/api/v1/user/admin/me`,
           { withCredentials: true }
         );
         console.log(response);
         setIsAuthenticated(true);
         setUser(response.data.user);
-      } catch (error) {
+      } catch (err) {
+        console.error("Authentication error:", err);
         setIsAuthenticated(false);
         setUser({});
       } finally {

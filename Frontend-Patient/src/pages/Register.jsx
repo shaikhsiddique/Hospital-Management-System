@@ -4,6 +4,8 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const Register = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
   const [firstName, setFirstName] = useState("");
@@ -21,7 +23,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/v1/user/patient/register",
+        `${BACKEND_URL}/api/v1/user/patient/register`,
         {
           firstName,
           lastName,
@@ -108,7 +110,10 @@ const Register = () => {
         </div>
 
         <div>
-          <select value={gender} onChange={(e) => setGender(e.target.value)}>
+          <select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+          >
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
