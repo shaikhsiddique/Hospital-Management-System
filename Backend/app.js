@@ -15,10 +15,14 @@ const app = express();
 config({ path: "./config/config.env" })
 
 app.use(cors({
-    origin: ['https://hospital-management-system-alpha-ten.vercel.app/','https://hospital-management-system-patient-six.vercel.app/'],
+    origin: [
+        'https://hospital-management-system-alpha-ten.vercel.app',
+        'https://hospital-management-system-patient-six.vercel.app'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true 
 }));
+
 
 
 
