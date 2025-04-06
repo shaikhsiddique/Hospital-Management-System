@@ -26,17 +26,20 @@ const App = () => {
           "http://localhost:4000/api/v1/user/admin/me",
           { withCredentials: true }
         );
+        console.log(response);
         setIsAuthenticated(true);
         setUser(response.data.user);
       } catch (error) {
         setIsAuthenticated(false);
         setUser({});
-      }finally {
+      } finally {
         setLoading(false);
       }
     };
+  
     fetchUser();
-  }, [isAuthenticated,setIsAuthenticated, setUser]);
+  }, []); // ← only run on mount
+  
 
 
   if (loading) {

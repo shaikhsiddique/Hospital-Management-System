@@ -14,13 +14,13 @@ const app = express();
 
 config({ path: "./config/config.env" })
 
-app.use(cors(
-    {
-        origin: [process.env.FRONTEND_PATIENT, process.env.FRONTEND_ADMIN],
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true
-    }
-))
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true 
+}));
+
+
 
 app.use(cookieParser())
 app.use(express.json())

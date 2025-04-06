@@ -38,10 +38,12 @@ const Register = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
+      console.log(response);
       toast.success(response.data.message);
       setIsAuthenticated(true);
       navigateTo("/");
     } catch (error) {
+      console.log(error)
       toast.error(error.response.data.message);
     }
   };

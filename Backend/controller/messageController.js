@@ -2,27 +2,34 @@ import { Message } from "../models/messageSchema.js";
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/errorMiddleware.js";
 
-
 export const sendMessage = catchAsyncErrors(async (req, res, next) => {
-    const { firstName, lastName, email, phone, message } = req.body;
+    try {
+        const { firstName, lastName, email, phone, message } = req.body;
 
-    if (!firstName || !lastName || !email || !phone || !message) {
-        return next(new ErrorHandler("Please Fill Full Form", 400))
+        if (!firstName || !lastName || !email || !phone || !message) {
+            return next(new ErrorHandler("Please fill out the entire form", 400));
+        }
+
+        await Message.create({ firstName, lastName, email, phone, message });
+
+        res.status(200).json({
+            success: true,
+            message: "Message sent successfully!"
+        });
+    } catch (error) {
+        return next(new ErrorHandler("Failed to send message", 500));
     }
+});
 
-    await Message.create({ firstName, lastName, email, phone, message })
-    res.status(200).json({
-        success: true,
-        message: "Message Send Successfully!"
-    })
-})
+export const getAllMessages = catchAsyncErrors(async (req, res, next) => {
+    try {
+        const messages = await Message.find();
 
-
-export const getAllMessages = catchAsyncErrors(async(req,res,next)=>{
-    const messages = await Message.find();
-    res.status(200).json({
-        success: true,
-        messages
-    })
-
-})
+        res.status(200).json({
+            success: true,
+            messages
+        });
+    } catch (error) {
+        return next(new ErrorHandler("Failed to retrieve messages", 500));
+    }
+});
